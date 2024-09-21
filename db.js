@@ -1,16 +1,26 @@
 const { Sequelize } = require('sequelize');
-require('dotenv').config(); // Load environment variables from .env file
+require('dotenv').config();  // Load environment variables from .env file
 
-const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, process.env.DB_PASSWORD, {
-    host: process.env.DB_HOST,
-    dialect: 'mysql',
-    port: process.env.DB_PORT || 3306,
-    logging: false, // Disable logging in production
-});
+// Create a Sequelize instance and pass environment variables
+const sequelize = new Sequelize(
+    process.env.DB_NAME,   // Database name
+    process.env.DB_USER,   // Database username
+    process.env.DB_PASSWORD,  // Database password
+    {
+        host: process.env.DB_HOST,  // Database host
+        dialect: 'mysql',           // We are using MySQL
+        port: process.env.DB_PORT || 3306,  // Default to 3306 if not set
+        logging: false,  // Disable logging for production (optional)
+    }
+);
 
-// Test the connection
+// Test the database connection
 sequelize.authenticate()
-    .then(() => console.log('Connected to the JawsDB MySQL database!'))
-    .catch(err => console.error('Unable to connect to the database:', err));
+    .then(() => {
+        console.log('Database connected successfully!');
+    })
+    .catch(err => {
+        console.error('Error: Unable to connect to the database:', err);
+    });
 
 module.exports = sequelize;
